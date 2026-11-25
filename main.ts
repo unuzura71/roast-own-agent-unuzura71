@@ -11,7 +11,9 @@ mkdirSync(outDir, { recursive: true });
 
 // Fail loudly instead of shipping an invalid entry: the sealed
 // scorer only accepts 1-200 characters of non-whitespace text.
-if (ROAST.length < 1 || ROAST.length > 200 || ROAST.trim().length === 0) {
-  throw new Error(`roast is ${ROAST.length} chars, outside the 1-200 gate`);
+// Count Unicode code points, not UTF-16 units, to match the gate.
+const roastLen = [...ROAST].length;
+if (roastLen < 1 || roastLen > 200 || ROAST.trim().length === 0) {
+  throw new Error(`roast is ${roastLen} chars, outside the 1-200 gate`);
 }
 writeFileSync(`${outDir}/entry.txt`, ROAST, "utf8");
